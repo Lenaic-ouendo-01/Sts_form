@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <title>Formulaire PDF</title>
+</head>
+
+<body>
+    <div class="corps h-full bg-gray-400 dark:bg-gray-900">
+        <div class="mx-auto">
+            <div class="flex justify-center px-6 py-12">
+                <div class="w-full xl:w-3/4 lg:w-11/12 flex">
+                    <div class="w-full h-auto bg-gray-400 dark:bg-gray-800 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
+                        style="background-image: url('https://source.unsplash.com/Mv9hjnEUHR4/600x800')"></div>
+                    <div class="w-full lg:w-7/12 bg-white dark:bg-gray-700 p-5 rounded-lg lg:rounded-l-none formulaire">
+                        <form action="" class="px-8 pt-6 pb-8 mb-4 bg-white dark:bg-gray-800 rounded" name="form1">
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-white">
+                                    Identify the people involved
+                                </label>
+                                <input
+                                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 dark:text-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                    name="Intervenants" type="text" placeholder="Intervenants" required />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-white">
+                                    Room
+                                </label>
+                                <label
+                                    class="flex items-center bg-gray-100 text-gray-700 rounded-md px-3 py-2 my-3 hover:bg-indigo-300 cursor-pointer">
+                                    <input type="radio" name="Room" value="Energy Room" required>
+                                    <span class="pl-2">Energy Room</span>
+                                </label>
+                                <label
+                                    class="flex items-center bg-gray-100 text-gray-700 rounded-md px-3 py-2 my-3 hover:bg-indigo-300 cursor-pointer">
+                                    <input type="radio" name="Room" value="Server Room" required>
+                                    <span class="pl-2">Server Room</span>
+                                </label>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-white">
+                                    Date
+                                </label>
+                                <div class="text-center mt-2">
+                                    <label class="text-lg font-semibold">Choose Date</label> <br>
+                                    <input id="datepicker" name="Date"
+                                        class="border-2 border-gray-300 rounded px-3 py-2 w-56 mt-2" type="text"
+                                        placeholder="Select a date" required>
+                                </div>
+                                <div class="md:flex md:justify-between mt-6">
+                                    <div class="text-center">
+                                        <label class="text-lg font-semibold">Entry time</label><br>
+                                        <input name="EntryTime"
+                                            class="border-2 border-gray-300 rounded px-3 py-2 w-56 mt-2" type="time"
+                                            placeholder="Heure d'entrée" required>
+                                    </div>
+                                    <div class="text-center mt-5 md:mt-0">
+                                        <label class="text-lg font-semibold">Exit time</label><br>
+                                        <input name="ExitTime"
+                                            class="border-2 border-gray-300 rounded px-3 py-2 w-56 mt-2" type="time"
+                                            placeholder="Heure de sortie" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-white">
+                                    Equipment to be modified
+                                </label>
+                                <input
+                                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 dark:text-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                    name="Equipement" type="text" placeholder="Équipement" required />
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-bold text-gray-700 dark:text-white">
+                                    Tools to be used
+                                </label>
+                                <input
+                                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 dark:text-white border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                    name="Tools" type="text" placeholder="Outils" required />
+                            </div>
+
+                            <div class="mb-6 text-center">
+                                <button
+                                    class="input-type-submit w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                                    type="button">
+                                    Soumettre
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialisation de Flatpickr
+        flatpickr("#datepicker", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            allowInput: true,
+        });
+
+        const btnSubmit = document.querySelector(".input-type-submit");
+
+        btnSubmit.onclick = () => {
+            const form = document.forms.form1;
+            const corps = document.querySelector(".corps");
+
+            // Vérifier que tous les champs sont remplis
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Création de l'aperçu PDF
+            corps.innerHTML = `
+                <div class="macarte px-8 py-4 bg-gray-50 shadow-lg rounded border border-gray-200 max-w-2xl mx-auto">
+                    <h1 class="text-center text-2xl font-bold text-gray-700 mb-4">Intervention Summary</h1>
+                    <hr class="mb-4">
+                    <div class="mb-4">
+                        <p><strong>Identify the people involved:</strong> ${form.Intervenants.value}</p>
+                    </div>
+                    <div class="mb-4">
+                        <p><strong>Room:</strong> ${form.Room.value}</p>
+                    </div>
+                    <div class="mb-4">
+                        <p><strong>Date:</strong> ${form.Date.value}</p>
+                        <p><strong>Entry time:</strong> ${form.EntryTime.value}</p>
+                        <p><strong>Exit time:</strong> ${form.ExitTime.value}</p>
+                    </div>
+                    <div class="mb-4">
+                        <p><strong>Equipment to be modified:</strong> ${form.Equipement.value}</p>
+                    </div>
+                    <div class="mb-4">
+                        <p><strong>Tools to be used:</strong> ${form.Tools.value}</p>
+                    </div>
+                    <button id="btn-download" class="input-type-submit2 px-4 py-2 font-bold text-white bg-green-500 rounded mt-4">
+                        Télécharger
+                    </button>
+                    <a
+                        href="http://10.225.5.201:8000/pages/UI.php?operation=new&class=UserRequest&c%5Bmenu%5D=NewUserRequest#ObjectProperties=tab_AttachmentsTab"
+                        target="_blank"
+                    >    
+                        <button id="btn-second" class="input-type-second px-4 py-2 font-bold text-white bg-gray-500 rounded mt-4 opacity-50 cursor-not-allowed" disabled>
+                            Second Bouton
+                        </button>
+                    </a>
+                </div>
+            `;
+
+            const btnDownload = document.getElementById("btn-download");
+            const btnSecond = document.getElementById("btn-second");
+            const element = document.querySelector(".macarte");
+
+            // Fonction pour générer le PDF
+            btnDownload.onclick = () => {
+                // Masquer le bouton "Télécharger" et "Second Bouton" avant la génération du PDF
+                btnDownload.style.display = "none";
+                btnSecond.style.display = "none";
+
+                html2pdf().from(element).save("document_iTop.pdf").then(() => {
+                    // Réafficher les boutons après la génération
+                    btnDownload.style.display = "block";
+                    btnSecond.style.display = "block";
+
+                    // Activation du second bouton
+                    btnSecond.disabled = false;
+                    btnSecond.classList.remove("opacity-50", "cursor-not-allowed");
+                    btnSecond.classList.add("bg-blue-500", "hover:bg-blue-700");
+                });
+            };
+
+            // Optionnel : Ajouter une fonctionnalité au second bouton
+            btnSecond.onclick = () => {
+                alert("Second bouton cliqué !");
+                // Ajoutez ici la fonctionnalité souhaitée pour le second bouton
+            };
+        };
+    </script>
+</body>
+
+</html>
